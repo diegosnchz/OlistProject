@@ -1,0 +1,46 @@
+version: 2
+
+sources:
+  - name: olist
+    description: "Dataset de e-commerce brasileño Olist (2016-2018)"
+    schema: main
+    tables:
+      - name: olist_orders_dataset
+        description: "Pedidos principales"
+        external:
+          location: "read_csv_auto('../../data/raw/olist_dataset/olist_orders_dataset.csv')"
+
+      - name: olist_order_items_dataset
+        description: "Ítems por pedido"
+        external:
+          location: "read_csv_auto('../../data/raw/olist_dataset/olist_order_items_dataset.csv')"
+
+      - name: olist_order_payments_dataset
+        description: "Pagos por pedido"
+        external:
+          location: "read_csv_auto('../../data/raw/olist_dataset/olist_order_payments_dataset.csv')"
+
+      - name: olist_order_reviews_dataset
+        description: "Reseñas por pedido"
+        external:
+          location: "read_csv_auto('../../data/raw/olist_dataset/olist_order_reviews_dataset.csv')"
+
+      - name: olist_customers_dataset
+        description: "Clientes"
+        external:
+          location: "read_csv_auto('../../data/raw/olist_dataset/olist_customers_dataset.csv')"
+
+      - name: olist_products_dataset
+        description: "Productos"
+        external:
+          location: "read_csv_auto('../../data/raw/olist_dataset/olist_products_dataset.csv')"
+
+      - name: olist_sellers_dataset
+        description: "Vendedores"
+        external:
+          location: "read_csv_auto('../../data/raw/olist_dataset/olist_sellers_dataset.csv')"
+
+      - name: product_category_name_translation
+        description: "Traducción de categorías PT->EN"
+        external:
+          location: "read_csv_auto('../../data/raw/olist_dataset/product_category_name_translation.csv')"
