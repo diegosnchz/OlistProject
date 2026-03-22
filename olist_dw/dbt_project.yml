@@ -31,5 +31,7 @@ models:
   olist_dw:
     staging:
       +materialized: view
+    intermediate:
+      +materialized: ephemeral
     marts:
       +materialized: table

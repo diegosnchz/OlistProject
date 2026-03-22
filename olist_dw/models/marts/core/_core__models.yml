@@ -1,0 +1,97 @@
+version: 2
+
+models:
+  - name: dim_customers
+    description: "Dimension de clientes unicos. Grain: una fila por customer_unique_id. Incluye metricas de valor del cliente."
+    columns:
+      - name: customer_unique_id
+        description: "Identificador unico real del cliente (PK)."
+        data_tests:
+          - unique
+          - not_null
+      - name: city
+        description: "Ciudad del cliente."
+        data_tests:
+          - not_null
+      - name: state
+        description: "Estado (UF) del cliente en Brasil."
+        data_tests:
+          - not_null
+      - name: total_orders
+        description: "Cantidad de pedidos realizados por el cliente."
+        data_tests:
+          - not_null
+      - name: total_spend
+        description: "Gasto total acumulado del cliente en BRL."
+      - name: first_order_at
+        description: "Timestamp del primer pedido del cliente."
+      - name: last_order_at
+        description: "Timestamp del ultimo pedido del cliente."
+      - name: avg_review_score
+        description: "Puntuacion media de resenas del cliente."
+      - name: customer_lifetime_days
+        description: "Dias entre el primer y el ultimo pedido del cliente."
+
+  - name: dim_products
+    description: "Dimension de productos del catalogo Olist. Grain: una fila por product_id. Incluye metricas de ventas y satisfaccion."
+    columns:
+      - name: product_id
+        description: "Identificador unico del producto (PK)."
+        data_tests:
+          - unique
+          - not_null
+      - name: category_name_pt
+        description: "Categoria del producto en portugues."
+      - name: category_name_en
+        description: "Categoria del producto en ingles (via traduccion)."
+      - name: name_length
+        description: "Longitud del nombre del producto en caracteres."
+      - name: description_length
+        description: "Longitud de la descripcion del producto en caracteres."
+      - name: photos_qty
+        description: "Cantidad de fotos publicadas del producto."
+      - name: weight_g
+        description: "Peso del producto en gramos."
+      - name: length_cm
+        description: "Largo del producto en centimetros."
+      - name: height_cm
+        description: "Alto del producto en centimetros."
+      - name: width_cm
+        description: "Ancho del producto en centimetros."
+      - name: total_orders
+        description: "Cantidad de pedidos que incluyen este producto."
+        data_tests:
+          - not_null
+      - name: avg_review_score
+        description: "Puntuacion media de resenas de pedidos que incluyen este producto."
+
+  - name: dim_sellers
+    description: "Dimension de vendedores de Olist. Grain: una fila por seller_id. Incluye metricas de rendimiento y satisfaccion."
+    columns:
+      - name: seller_id
+        description: "Identificador unico del vendedor (PK)."
+        data_tests:
+          - unique
+          - not_null
+      - name: city
+        description: "Ciudad del vendedor."
+        data_tests:
+          - not_null
+      - name: state
+        description: "Estado (UF) del vendedor en Brasil."
+        data_tests:
+          - not_null
+      - name: total_revenue
+        description: "Ingresos totales del vendedor en BRL."
+        data_tests:
+          - not_null
+      - name: total_orders
+        description: "Cantidad total de pedidos gestionados por el vendedor."
+        data_tests:
+          - not_null
+      - name: avg_delivery_days
+        description: "Promedio de dias de entrega de los pedidos del vendedor."
+      - name: on_time_delivery_rate
+        description: "Proporcion de pedidos entregados a tiempo (sin retraso)."
+      - name: avg_review_score
+        description: "Puntuacion media de resenas de los pedidos del vendedor."

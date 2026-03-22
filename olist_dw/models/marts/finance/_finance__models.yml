@@ -1,0 +1,85 @@
+version: 2
+
+models:
+  - name: fct_orders
+    description: "Tabla de hechos principal. Grain: una fila por pedido. Contiene metricas de pago, entrega y satisfaccion del cliente."
+    columns:
+      - name: order_id
+        description: "Identificador unico del pedido (PK)."
+        data_tests:
+          - unique
+          - not_null
+      - name: customer_id
+        description: "Identificador del cliente ligado al pedido."
+        data_tests:
+          - not_null
+      - name: order_status
+        description: "Estado final del pedido."
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - delivered
+                  - shipped
+                  - canceled
+                  - unavailable
+                  - invoiced
+                  - processing
+                  - approved
+                  - created
+      - name: purchased_at
+        description: "Timestamp en que se realizo el pedido."
+        data_tests:
+          - not_null
+      - name: approved_at
+        description: "Timestamp de aprobacion del pago."
+      - name: delivered_to_customer_at
+        description: "Timestamp en que el cliente recibio el pedido."
+      - name: estimated_delivery_at
+        description: "Fecha estimada de entrega prometida al cliente."
+      - name: total_amount
+        description: "Importe total pagado por el pedido en BRL."
+      - name: total_freight
+        description: "Costo total de envio del pedido en BRL."
+      - name: payment_type
+        description: "Metodo de pago mas usado en el pedido."
+      - name: installments
+        description: "Total de cuotas sumadas de todos los pagos del pedido."
+      - name: review_score
+        description: "Puntuacion media de resena (1-5). Null si no hubo resena."
+      - name: has_review
+        description: "True si el pedido tiene al menos una resena."
+        data_tests:
+          - not_null
+      - name: delivery_days
+        description: "Dias entre compra y entrega al cliente. Null si no fue entregado."
+      - name: is_late_delivery
+        description: "True si la entrega ocurrio despues de la fecha estimada."
+        data_tests:
+          - not_null
+      - name: is_delivered
+        description: "True si el pedido tiene status 'delivered'."
+        data_tests:
+          - not_null
+
+  - name: fct_daily_revenue
+    description: "Ingresos diarios agregados. Grain: una fila por dia. Solo incluye pedidos con status 'delivered'."
+    columns:
+      - name: order_date
+        description: "Fecha del dia (truncada de purchased_at)."
+        data_tests:
+          - unique
+          - not_null
+      - name: total_revenue
+        description: "Suma de ingresos del dia en BRL. Puede ser null si todos los pedidos del dia carecen de registro de pago."
+      - name: total_orders
+        description: "Cantidad de pedidos entregados en el dia."
+        data_tests:
+          - not_null
+      - name: avg_order_value
+        description: "Valor promedio por pedido del dia en BRL. Puede ser null si total_revenue es null."
+      - name: total_freight
+        description: "Costo total de envio del dia en BRL."
+        data_tests:
+          - not_null

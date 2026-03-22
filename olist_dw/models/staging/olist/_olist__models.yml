@@ -1,0 +1,174 @@
+version: 2
+
+models:
+  - name: stg_olist__orders
+    description: "Pedidos del marketplace Olist. Cada fila es un pedido unico con su ciclo de vida completo."
+    columns:
+      - name: order_id
+        description: "Identificador unico del pedido."
+        data_tests:
+          - unique
+          - not_null
+      - name: customer_id
+        description: "Identificador del cliente para este pedido (puede repetirse por customer_unique_id)."
+        data_tests:
+          - not_null
+      - name: order_status
+        description: "Estado del pedido (delivered, shipped, canceled, etc.)."
+        data_tests:
+          - not_null
+      - name: purchased_at
+        description: "Timestamp en que el cliente realizo el pedido."
+        data_tests:
+          - not_null
+      - name: approved_at
+        description: "Timestamp de aprobacion del pago. Puede ser null si nunca fue aprobado."
+      - name: delivered_to_carrier_at
+        description: "Timestamp en que el pedido fue entregado al transportista."
+      - name: delivered_to_customer_at
+        description: "Timestamp en que el cliente recibio el pedido."
+      - name: estimated_delivery_at
+        description: "Fecha estimada de entrega prometida al cliente."
+
+  - name: stg_olist__customers
+    description: "Clientes del marketplace. Cada fila es un customer_id unico. Un mismo customer_unique_id puede tener varios customer_id si compro varias veces."
+    columns:
+      - name: customer_id
+        description: "Identificador de cliente ligado a un pedido especifico."
+        data_tests:
+          - unique
+          - not_null
+      - name: customer_unique_id
+        description: "Identificador unico del cliente real (puede tener multiples customer_id)."
+        data_tests:
+          - not_null
+      - name: city
+        description: "Ciudad del cliente."
+        data_tests:
+          - not_null
+      - name: state
+        description: "Estado (UF) del cliente en Brasil."
+        data_tests:
+          - not_null
+      - name: zip_code_prefix
+        description: "Prefijo del codigo postal del cliente."
+
+  - name: stg_olist__order_items
+    description: "Items incluidos en cada pedido. Un pedido puede tener multiples items de distintos vendedores."
+    columns:
+      - name: order_id
+        description: "Identificador del pedido al que pertenece el item."
+        data_tests:
+          - not_null
+      - name: order_item_id
+        description: "Numero secuencial del item dentro del pedido."
+        data_tests:
+          - not_null
+      - name: product_id
+        description: "Identificador del producto comprado."
+        data_tests:
+          - not_null
+      - name: seller_id
+        description: "Identificador del vendedor que despacha este item."
+        data_tests:
+          - not_null
+      - name: shipping_limit_at
+        description: "Fecha limite para que el vendedor despache el item."
+      - name: price
+        description: "Precio del item en reales brasilenios (BRL)."
+        data_tests:
+          - not_null
+      - name: freight_value
+        description: "Valor del flete para este item en BRL."
+        data_tests:
+          - not_null
+
+  - name: stg_olist__order_payments
+    description: "Pagos realizados por pedido. Un pedido puede tener multiples pagos (ej. tarjeta + voucher)."
+    columns:
+      - name: order_id
+        description: "Identificador del pedido."
+        data_tests:
+          - not_null
+      - name: payment_sequential
+        description: "Numero de secuencia del pago dentro del pedido."
+        data_tests:
+          - not_null
+      - name: payment_type
+        description: "Metodo de pago (credit_card, boleto, voucher, debit_card)."
+        data_tests:
+          - not_null
+      - name: installments
+        description: "Numero de cuotas del pago."
+        data_tests:
+          - not_null
+      - name: payment_value
+        description: "Valor del pago en BRL."
+        data_tests:
+          - not_null
+
+  - name: stg_olist__order_reviews
+    description: "Resenas dejadas por los clientes tras recibir sus pedidos."
+    columns:
+      - name: review_id
+        description: "Identificador de la resena. Nota: el source tiene duplicados (la misma resena puede aparecer para multiples pedidos)."
+        data_tests:
+          - not_null
+      - name: order_id
+        description: "Identificador del pedido reseniado."
+        data_tests:
+          - not_null
+      - name: review_score
+        description: "Puntuacion de 1 a 5 otorgada por el cliente."
+      - name: review_comment_title
+        description: "Titulo opcional del comentario."
+      - name: review_comment_message
+        description: "Cuerpo opcional del comentario."
+      - name: review_created_at
+        description: "Timestamp en que se envio la encuesta de satisfaccion al cliente."
+      - name: review_answered_at
+        description: "Timestamp en que el cliente completo la encuesta."
+
+  - name: stg_olist__products
+    description: "Catalogo de productos disponibles en Olist."
+    columns:
+      - name: product_id
+        description: "Identificador unico del producto."
+        data_tests:
+          - unique
+          - not_null
+      - name: category_name_pt
+        description: "Nombre de la categoria del producto en portugues."
+      - name: name_length
+        description: "Longitud en caracteres del nombre del producto."
+      - name: description_length
+        description: "Longitud en caracteres de la descripcion del producto."
+      - name: photos_qty
+        description: "Cantidad de fotos publicadas del producto."
+      - name: weight_g
+        description: "Peso del producto en gramos."
+      - name: length_cm
+        description: "Largo del producto en centimetros."
+      - name: height_cm
+        description: "Alto del producto en centimetros."
+      - name: width_cm
+        description: "Ancho del producto en centimetros."
+
+  - name: stg_olist__sellers
+    description: "Vendedores registrados en Olist."
+    columns:
+      - name: seller_id
+        description: "Identificador unico del vendedor."
+        data_tests:
+          - unique
+          - not_null
+      - name: city
+        description: "Ciudad del vendedor."
+        data_tests:
+          - not_null
+      - name: state
+        description: "Estado (UF) del vendedor en Brasil."
+        data_tests:
+          - not_null
+      - name: zip_code_prefix
+        description: "Prefijo del codigo postal del vendedor."
