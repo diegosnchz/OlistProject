@@ -4,6 +4,8 @@ A dbt + DuckDB data warehouse built on the Brazilian Olist e-commerce dataset (2
 
 ![dbt passing](https://img.shields.io/badge/dbt-passing-brightgreen?logo=dbt) ![DuckDB](https://img.shields.io/badge/DuckDB-1.10.1-yellow?logo=duckdb)
 
+![DAG](docs/dag_screenshot.png)
+
 ---
 
 ## Architecture
@@ -138,47 +140,49 @@ Then open http://localhost:8080 in your browser to explore the DAG and model doc
 ## Project Structure
 
 ```
-olist_dw/
-|-- dbt_project.yml               # Project configuration and materializations
-|-- packages.yml                  # dbt package dependencies
-|-- seeds/                        # Raw CSV data loaded into DuckDB
-|   |-- olist_orders_dataset.csv
-|   |-- olist_customers_dataset.csv
-|   |-- olist_order_items_dataset.csv
-|   |-- olist_order_payments_dataset.csv
-|   |-- olist_order_reviews_dataset.csv
-|   |-- olist_products_dataset.csv
-|   |-- olist_sellers_dataset.csv
-|   `-- product_category_name_translation.csv
-|-- models/
-|   |-- staging/
-|   |   `-- olist/
-|   |       |-- _olist__sources.yml          # Source definitions
-|   |       |-- _olist__models.yml           # Staging model docs and tests
-|   |       |-- stg_olist__orders.sql
-|   |       |-- stg_olist__customers.sql
-|   |       |-- stg_olist__order_items.sql
-|   |       |-- stg_olist__order_payments.sql
-|   |       |-- stg_olist__order_reviews.sql
-|   |       |-- stg_olist__products.sql
-|   |       `-- stg_olist__sellers.sql
-|   |-- intermediate/
-|   |   `-- ecommerce/
-|   |       |-- int_orders_with_payments.sql
-|   |       `-- int_orders_with_reviews.sql
-|   `-- marts/
-|       |-- finance/
-|       |   |-- _finance__models.yml
-|       |   |-- fct_orders.sql
-|       |   `-- fct_daily_revenue.sql
-|       `-- core/
-|           |-- _core__models.yml
-|           |-- dim_customers.sql
-|           |-- dim_products.sql
-|           `-- dim_sellers.sql
-|-- tests/
-|   `-- assert_fct_orders_positive_amounts.sql
-`-- docs/
+OlistProject/
+|-- docs/
+|   `-- dag_screenshot.png
+`-- olist_dw/
+    |-- dbt_project.yml               # Project configuration and materializations
+    |-- packages.yml                  # dbt package dependencies
+    |-- seeds/                        # Raw CSV data loaded into DuckDB
+    |   |-- olist_orders_dataset.csv
+    |   |-- olist_customers_dataset.csv
+    |   |-- olist_order_items_dataset.csv
+    |   |-- olist_order_payments_dataset.csv
+    |   |-- olist_order_reviews_dataset.csv
+    |   |-- olist_products_dataset.csv
+    |   |-- olist_sellers_dataset.csv
+    |   `-- product_category_name_translation.csv
+    |-- models/
+    |   |-- staging/
+    |   |   `-- olist/
+    |   |       |-- _olist__sources.yml          # Source definitions
+    |   |       |-- _olist__models.yml           # Staging model docs and tests
+    |   |       |-- stg_olist__orders.sql
+    |   |       |-- stg_olist__customers.sql
+    |   |       |-- stg_olist__order_items.sql
+    |   |       |-- stg_olist__order_payments.sql
+    |   |       |-- stg_olist__order_reviews.sql
+    |   |       |-- stg_olist__products.sql
+    |   |       `-- stg_olist__sellers.sql
+    |   |-- intermediate/
+    |   |   `-- ecommerce/
+    |   |       |-- int_orders_with_payments.sql
+    |   |       `-- int_orders_with_reviews.sql
+    |   `-- marts/
+    |       |-- finance/
+    |       |   |-- _finance__models.yml
+    |       |   |-- fct_orders.sql
+    |       |   `-- fct_daily_revenue.sql
+    |       `-- core/
+    |           |-- _core__models.yml
+    |           |-- dim_customers.sql
+    |           |-- dim_products.sql
+    |           `-- dim_sellers.sql
+    `-- tests/
+        `-- assert_fct_orders_positive_amounts.sql
 ```
 
 ---
